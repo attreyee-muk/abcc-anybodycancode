@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>Speech to text conversion using JavaScript</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
+        <style>
+          
+          *{transition:all 0.3s ease-in-out;}
+
+.container{
+  clear:both;
+  overflow:auto;
+}
+
+nav{float:right;}
+
+.logo img{float:left;}
+
+ul li{
+  display: inline-block; padding:10px;
+  font-size:20px; font-family:raleway;
+}
+
+ul li:hover{
+  color:orange;
+  
+}
+          body {
+            display: flex;
+            background-color:rgb(26, 22, 22);
+            
+          }
+          .code-area {
+            background-color: rgb(26, 22, 22);
+            position:relative;
+            top:110px;
+            display: flex;
+            flex-direction:column;
+            width: 50%;
+            height:90%;
+            border-right:10px solid rgb(26, 22, 22);
+            
+          }
+          .code-area textarea {
+            resize: none;
+            outline: none;
+            width:80%;
+            
+            height: 33.33%;
+            font-size: 18px;
+            padding: 10px;
+            border:2px solid black;
+            
+          }
+          .preview-area {
+            left:1%;
+            width: 50%;
+            
+            position:relative;
+            top:110px;
+            border: 2px solid white;
+            background-color: white;
+            
+          }
+          .preview-area iframe {
+            width: 100%;
+            border:none;
+            background-color: white;
+            
+            
+          }
+          
+          .buttons{
+              width:200px;
+              height:100px;
+              display: block;
+
+              
+
+          }
+
+          @media screen and (max-width:700px){
+            span{
+              font-size:25px;
+
+            }
+            .navbar-brand{
+              font-size:25px;
+            }
+            
+            
+          }
+          
+
+/* CSS */
+.button-33 {
+  background-color: #c2fbd7;
+  border-radius: 100px;
+  box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+  color: green;
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-bottom:4px;
+}
+
+.button-33:hover {
+  box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+  transform: scale(1.05) rotate(-1deg);
+
+}
+          .navbar{
+            position:absolute;
+            color:white;
+            font-size:20px;
+            margin-bottom: 100px;
+            
+            
+            
+            height:100px;
+            width:100%;
+          }
+          a{
+            position:relative;
+            top:0px;
+            font-size:40px;
+            left:0px;
+            
+            text-align:center;
+            margin-bottom: 4px;;
+          }
+          .form-group{
+            border:2px solid white;
+            
+            text-align: center;
+          }
+          .button-33-stop{
+            background-color: #fbc2c2;
+  border-radius: 100px;
+  box-shadow: rgba(187, 44, 44, 0.2) 0 -25px 18px -14px inset,rgba(187, 44, 44, 0.2) 0 1px 2px,rgba(187, 44, 44, 0.2) 0 2px 4px,rgba(187, 44, 44, 0.2) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+  color: rgb(180, 8, 8);
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-bottom:4px;
+
+          }
+        
+          .button-33-stop:hover {
+            box-shadow: rgba(187, 44, 44, 0.35) 0 -25px 18px -14px inset,rgba(187, 44, 44, 0.25) 0 1px 2px,rgba(187, 44, 44, 0.25) 0 2px 4px,rgba(187, 44, 44, 0.25) 0 4px 8px,rgba(187, 44, 44, 0.25) 0 8px 16px,rgba(187, 44, 44, 0.25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+          }
+        span{
+          color:rgba(184, 210, 245, 0.884)
+        } 
+        nav{
+          margin-bottom:100px;
+        }
+      </style>
+
+    </head>
+
+    <body>
+      <nav class="navbar navbar-light bg-light justify-content-between">
+        <img src="https://img.icons8.com/cotton/100/000000/eye-disease.png"/>
+        <img src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/100/000000/external-coding-online-learning-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"/>
+        
+        <a class="navbar-brand">ANYBODY CAN <span>CODE!</span></a>
+        
+        
+        
+        
+        
+        
+      </nav>
+      <div class="bar">
+
+      </div>
+    <div class="code-area">
+        <div class="form-group"> 
+          <div><img src="https://img.icons8.com/color/48/000000/html-5--v1.png"/></div>
+          <div class="input">
+            <textarea class="form-control" id="htmlCode" rows="10" placeholder="HTML Code" 
+            oninput="showPreview()"></textarea>
+          </div>         
+          <button id="start1" class="button-33" title="Start">Start</button>
+          <button id="stop1" class="button-33-stop" title="Stop">Stop</button>
+        </div>
+        <br/>
+      <div class="form-group"> 
+        <div><img src="https://img.icons8.com/color/48/000000/css3.png"/></div>
+        <div class="input">
+          <textarea class="form-control" id="cssCode" rows="10" placeholder="CSS Code" 
+          oninput="showPreview()"></textarea>
+        </div>         
+        <button id="start2" class="button-33" title="Start">Start</button>
+        <button id="stop2" class="button-33-stop" title="Stop">Stop</button>
+      </div>
+      <br/>
+      <div class="form-group">
+        <div><img src="https://img.icons8.com/color/48/000000/javascript--v1.png"/></div> 
+        <div class="input">
+          <textarea class="form-control" id="jsCode" rows="10" placeholder="JAVASCRIPT Code" 
+        oninput="showPreview()"></textarea>
+        </div>         
+        <button id="start3" class="button-33" title="Start">Start</button>
+        <button id="stop3" class="button-33-stop" title="Stop">Stop</button>
+      </div>
+
+    </div>
+
+    
+
+  <div class="preview-area">
+    <iframe id="preview-window"></iframe>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </div>
+  <div class="alan-btn"></div>
+
+    </body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+ 
+  
+  function showPreview(){
+    var htmlCode = document.getElementById("htmlCode").value;
+    var cssCode = "<style>"+document.getElementById("cssCode").value+"</style>";
+    var jsCode = "<scri"+"pt>"+document.getElementById("jsCode").value+"</scri"+"pt>";
+    var frame = document.getElementById("preview-window").contentWindow.document;
+    frame.open();
+    frame.write(htmlCode+cssCode+jsCode);
+    frame.close();
+  }  
+var SpeechRecognition = window.webkitSpeechRecognition;
+  
+var recognition1 = new SpeechRecognition();
+
+var Textbox1 = $('#htmlCode');
+
+
+var Content1 = '';
+
+recognition1.continuous = true;
+
+recognition1.onresult = function(event1) {
+
+  var current1 = event1.resultIndex;
+
+  var transcript = event1.results[current1][0].transcript;
+    
+    if (transcript.includes('dot')){
+      
+      Textbox1.val(Content1+=".");
+    }
+    else if (transcript.includes('exclamation mark')){
+      Textbox1.val(Content1+="!");
+    }
+    else if (transcript.includes('at the rate')){
+      Textbox1.val(Content1+="@");
+    }
+    else if (transcript.includes('hashtag')){
+      Textbox1.val(Content1+="#");
+    }
+    else if (transcript.includes('dollar')){
+      Textbox1.val(Content1+="$");
+    }
+    else if (transcript.includes('percent')){
+      Textbox1.val(Content1+="%");
+    }
+    else if (transcript.includes('caret')){
+      Textbox1.val(Content1+="^");
+    }
+    else if (transcript.includes('star')){
+      Textbox1.val(Content1+="*");
+    }
+    else if (transcript.includes('open round bracket')){
+      Textbox1.val(Content1+="(");
+    }
+    else if (transcript.includes('close round braces')){
+      Textbox1.val(Content1+=")");
+    }
+    else if (transcript.includes('minus') || transcript.includes('dash') ) {
+      Textbox1.val(Content1+="-");
+    }
+    else if (transcript.includes('underscore')){
+      Textbox1.val(Content1+="_");
+    }
+    else if (transcript.includes('plus')){
+      Textbox1.val(Content1+="+");
+    }
+    else if (transcript.includes('equal to')){
+      Textbox1.val(Content1+="=");
+    }
+    else if (transcript.includes('curly')){
+      Textbox1.val(Content1+="{");
+    }
+    else if (transcript.includes('closed curly bracket')){
+      Textbox1.val(Content1+="}");
+    }
+    else if (transcript.includes('open curly bracket')){
+      Textbox1.val(Content1+="{");
+    }
+    else if (transcript.includes('open square bracket')){
+      Textbox1.val(Content1+="[");
+    }
+    else if (transcript.includes('closed square bracket')){
+      Textbox1.val(Content1+="]");
+    }
+    else if (transcript.includes('vertical bar')){
+      Textbox1.val(Content1+="|");
+    }
+    else if (transcript.includes('backward slash') || transcript.includes('backslash')){
+      Textbox1.val(Content1+="\\");
+    }
+    else if (transcript.includes('colon')){
+      Textbox1.val(Content1+=":");
+    }
+    else if (transcript.includes('semicolon')){
+      Textbox1.val(Content1+=";");
+    } 
+    else if (transcript.includes('double quotes')){
+
+      Textbox1.val(Content1+="\"");
+    } 
+    else if (transcript.includes('greater than')){
+      Textbox1.val(Content1+=">");
+    } 
+    else if (transcript.includes('smaller than') || transcript.includes('less than')  ){
+      Textbox1.val(Content1+="<");
+    } 
+    else if (transcript.includes('comma')){
+      Textbox1.val(Content1+=",");
+    } 
+    else if (transcript.includes('question mark')){
+      Textbox1.val(Content1+="?");
+    } 
+    else if (transcript.includes('forward slash')){
+      Textbox1.val(Content1+="/");
+    } 
+    else if (transcript.includes('space')){
+      Textbox1.val(Content1+=" ");
+    } 
+    else{
+      Content1 += transcript;
+      Textbox1.val(Content1);
+    }
+
+};
+
+recognition1.onerror = function(event1) {
+  if(event1.error == 'no-speech') {
+    instructions.text('Try again.');  
+  }
+}
+
+$('#start1').on('click', function(e) {
+  if (Content1.length) {
+    Content1 += ' ';
+  }
+  recognition1.start();
+});
+
+$('#stop1').on('click', function(e) {
+  if (Content1.length) {
+    Content1 += ' ';
+  }
+  recognition1.stop();
+});
+
+Textbox1.on('input', function() {
+    Content1 = $(this).val();
+    
+})
+
+
+
+var SpeechRecognition = window.webkitSpeechRecognition;
+  
+var recognition2 = new SpeechRecognition();
+
+var Textbox2 = $('#cssCode');
+
+
+var Content2 = '';
+
+recognition2.continuous = true;
+
+recognition2.onresult = function(event) {
+
+  var current2 = event.resultIndex;
+
+  var transcript = event.results[current2][0].transcript;
+  if (transcript.includes('dot')){
+      
+    Textbox2.val(Content2+=".");
+  }
+  else if (transcript.includes('exclamation mark')){
+    Textbox2.val(Content2+="!");
+  }
+  else if (transcript.includes('at the rate')){
+    Textbox2.val(Content2+="@");
+  }
+  else if (transcript.includes('hashtag')){
+    Textbox2.val(Content2+="#");
+  }
+  else if (transcript.includes('dollar')){
+    Textbox2.val(Content2+="$");
+  }
+  else if (transcript.includes('percent')){
+    Textbox2.val(Content2+="%");
+  }
+  else if (transcript.includes('caret')){
+    Textbox2.val(Content2+="^");
+  }
+  else if (transcript.includes('star')){
+    Textbox2.val(Content2+="*");
+  }
+  else if (transcript.includes('open round bracket')){
+    Textbox2.val(Content2+="(");
+  }
+  else if (transcript.includes('close round braces')){
+    Textbox2.val(Content2+=")");
+  }
+  else if (transcript.includes('minus') || transcript.includes('dash') ) {
+    Textbox2.val(Content2+="-");
+  }
+  else if (transcript.includes('underscore')){
+    Textbox2.val(Content2+="_");
+  }
+  else if (transcript.includes('plus')){
+    Textbox2.val(Content2+="+");
+  }
+  else if (transcript.includes('equal to')){
+    Textbox2.val(Content2+="=");
+  }
+  
+  else if (transcript.includes('closed curly bracket')){
+    Textbox2.val(Content2+="}");
+  }
+  else if (transcript.includes('open curly bracket')){
+    Textbox2.val(Content2+="{");
+  }
+  else if (transcript.includes('open square bracket')){
+    Textbox2.val(Content2+="[");
+  }
+  else if (transcript.includes('closed square bracket')){
+    Textbox2.val(Content2+="]");
+  }
+  else if (transcript.includes('vertical bar')){
+    Textbox2.val(Content2+="|");
+  }
+  else if (transcript.includes('backward slash') || transcript.includes('backslash')){
+    Textbox2.val(Content2+="\\");
+  }
+  else if (transcript.includes('colon')){
+    Textbox2.val(Content2+=":");
+  }
+  else if (transcript.includes('semicolon')){
+    Textbox2.val(Content2+=";");
+  } 
+  else if (transcript.includes('double quotes')){
+
+    Textbox2.val(Content2+="\"");
+  } 
+  else if (transcript.includes('greater than')){
+    Textbox2.val(Content2+=">");
+  } 
+  else if (transcript.includes('less than') || transcript.includes('smaller than')){
+    Textbox2.val(Content2+="<");
+  } 
+  else if (transcript.includes('comma')){
+    Textbox2.val(Content2+=",");
+  } 
+  else if (transcript.includes('question mark')){
+    Textbox2.val(Content2+="?");
+  } 
+  else if (transcript.includes('forward slash')){
+    Textbox2.val(Content2+="/");
+  } 
+  else if (transcript.includes('space')){
+    Textbox2.val(Content2+=" ");
+  } 
+  else{
+    Content2 += transcript;
+    Textbox2.val(Content2);
+  }
+ 
+    
+  
+};
+
+recognition2.onerror = function(event) {
+  if(event.error == 'no-speech') {
+    instructions.text('Try again.');  
+  }
+}
+
+$('#start2').on('click', function(e) {
+  if (Content2.length) {
+    Content2 += ' ';
+  }
+  recognition2.start();
+});
+
+$('#stop2').on('click', function(e) {
+  if (Content2.length) {
+    Content2 += ' ';
+  }
+  recognition2.stop();
+});
+
+Textbox2.on('input', function() {
+    Content2 = $(this).val();
+    
+})
+
+
+
+
+var SpeechRecognition = window.webkitSpeechRecognition;
+  
+var recognition3 = new SpeechRecognition();
+
+var Textbox3 = $('#jsCode');
+
+
+var Content3 = '';
+
+recognition3.continuous = true;
+
+recognition3.onresult = function(event) {
+
+  var current3 = event.resultIndex;
+
+  var transcript = event.results[current3][0].transcript;
+  if (transcript.includes('dot')){
+      
+    Textbox3.val(Content3+=".");
+  }
+  else if (transcript.includes('exclamation mark')){
+    Textbox3.val(Content3+="!");
+  }
+  else if (transcript.includes('at the rate')){
+    Textbox3.val(Content3+="@");
+  }
+  else if (transcript.includes('hashtag')){
+    Textbox3.val(Content3+="#");
+  }
+  else if (transcript.includes('dollar')){
+    Textbox3.val(Content3+="$");
+  }
+  else if (transcript.includes('percent')){
+    Textbox3.val(Content3+="%");
+  }
+  else if (transcript.includes('caret')){
+    Textbox3.val(Content3+="^");
+  }
+  else if (transcript.includes('star')){
+    Textbox3.val(Content3+="*");
+  }
+  else if (transcript.includes('open round bracket')){
+    Textbox3.val(Content3+="(");
+  }
+  else if (transcript.includes('close round braces')){
+    Textbox3.val(Content3+=")");
+  }
+  else if (transcript.includes('minus') || transcript.includes('dash') ) {
+    Textbox3.val(Content3+="-");
+  }
+  else if (transcript.includes('underscore')){
+    Textbox3.val(Content3+="_");
+  }
+  else if (transcript.includes('plus')){
+    Textbox3.val(Content3+="+");
+  }
+  else if (transcript.includes('equal to')){
+    Textbox3.val(Content3+="=");
+  }
+  else if (transcript.includes('curly')){
+    Textbox3.val(Content3+="{");
+  }
+  else if (transcript.includes('closed curly bracket')){
+    Textbox3.val(Content3+="}");
+  }
+  else if (transcript.includes('open curly bracket')){
+    Textbox3.val(Content3+="{");
+  }
+  else if (transcript.includes('open square bracket')){
+    Textbox3.val(Content3+="[");
+  }
+  else if (transcript.includes('closed square bracket')){
+    Textbox3.val(Content3+="]");
+  }
+  else if (transcript.includes('vertical bar')){
+    Textbox3.val(Content3+="|");
+  }
+  else if (transcript.includes('backward slash') || transcript.includes('backslash')){
+    Textbox3.val(Content3+="\\");
+  }
+  else if (transcript.includes('colon')){
+    Textbox3.val(Content3+=":");
+  }
+  else if (transcript.includes('semicolon')){
+    Textbox3.val(Content3+=";");
+  } 
+  else if (transcript.includes('double quotes')){
+
+    Textbox3.val(Content3+="\"");
+  } 
+  else if (transcript.includes('greater than')){
+    Textbox3.val(Content3+=">");
+  } 
+  else if (transcript.includes('less than') || transcript.includes('smaller than')){
+    Textbox3.val(Content3+="<");
+  } 
+  else if (transcript.includes('comma')){
+    Textbox3.val(Content3+=",");
+  } 
+  else if (transcript.includes('question mark')){
+    Textbox3.val(Content3+="?");
+  } 
+  else if (transcript.includes('forward slash')){
+    Textbox3.val(Content3+="/");
+  } 
+  else if (transcript.includes('space')){
+    Textbox3.val(Content3+=" ");
+  } 
+  else{
+    Content3 += transcript;
+    Textbox3.val(Content3);
+  }
+ 
+    
+  
+};
+
+recognition3.onerror = function(event) {
+  if(event.error == 'no-speech') {
+    instructions.text('Try again.');  
+  }
+}
+
+$('#start3').on('click', function(e) {
+  if (Content3.length) {
+    Content3 += ' ';
+  }
+  recognition3.start();
+});
+
+$('#stop3').on('click', function(e) {
+  if (Content3.length) {
+    Content3 += ' ';
+  }
+  recognition3.stop();
+});
+
+Textbox3.on('input', function() {
+    Content3 = $(this).val();
+    
+})
+</script>
+<script type="text/javascript"
+ src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script>
+  var alanBtnInstance = alanBtn({
+    key: "f1f0c74427dfb7721110f20b0008ef552e956eca572e1d8b807a3e2338fdd0dc/stage",
+    onCommand: function (commandData) {
+      if (commandData.command === "go:back") {
+        //call client code that will react on the received command
+      }
+    },
+    rootEl: document.getElementById("alan-btn"),
+  });
+
+  // Defining a project API method in the voice script
+projectAPI.greetUser = function(p, param, callback) {
+  if (param) {
+      p.play('Nice to see you again');
+  } else {
+      p.play('Welcome to our app');
+  }
+  callback();
+};
+</script>
+
+    
+
+</html>
